@@ -10,7 +10,8 @@
 			string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			DirectoryInfo? directory = new DirectoryInfo(baseDirectory);
 
-			while (baseDirectory != null && directory.Name != "CommandLineRPG")
+			string solutionName = "CLIrpg-Remake"; // TODO: Find a way to autofill this
+			while (baseDirectory != null && directory.Name != solutionName)
 			{
 				directory = directory.Parent;
 			}

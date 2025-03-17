@@ -13,6 +13,7 @@ namespace CLIrpg
 		{
 			try
 			{
+				Utility.CreateFileSystem();
 				while (Running)
 				{
                     Console.WriteLine("[SERIALIZE / DESERIALIZE]");
