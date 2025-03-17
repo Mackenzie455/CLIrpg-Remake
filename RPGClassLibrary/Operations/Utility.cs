@@ -60,7 +60,7 @@
                 Console.WriteLine(ex.Message);
 			}
 		}
-		public static string ValidateInput(string message, string errMsg = null)
+		public static string ValidateInput(string message, string errMsg = "Invalid input.")
 		{
 			string output = "";
 			do

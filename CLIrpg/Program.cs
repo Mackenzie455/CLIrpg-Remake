@@ -7,16 +7,40 @@ namespace CLIrpg
 {
 	internal class Program
 	{
-		public static LoggingService log = new LoggingService(Sender.FRONT);
+		public static Player player = null;
 		public static bool Running = true;
 		static void Main(string[] args)
 		{
 			try
 			{
-				Utility.CreateFileSystem();
+				/*
+				Startup
+				|- Deserialize startup object and execute it
+				|- Create output files if nessacary (Utility.CreateFileSystem)
+				*/
+				TempMenu();
+			}
+			catch (Exception ex)
+			{
+				Utility.fLog.ExceptionLog(LogLevel.ERROR, ex);
+			}
+		}
+
+		static void OpeningSeq()
+		{
+			string pname = Utility.ValidateInput("What is your name?");
+			string rname = Utility.ValidateInput("What is your role?");
+			string rdesc = Utility.ValidateInput("How would you describe your role?");
+			Player init = Player.PlayerFactory(pname, rname, rdesc);
+		}
+
+		static void TempMenu()
+		{
+			try
+			{
 				while (Running)
 				{
-                    Console.WriteLine("[SERIALIZE / DESERIALIZE]");
+					Console.WriteLine("[SERIALIZE / DESERIALIZE]");
 					string input = Console.ReadLine().ToLower();
 
 					switch (input)
@@ -41,25 +65,25 @@ namespace CLIrpg
 							break;
 
 						case "deserialize":
-                            Console.WriteLine("insert player name");
+							Console.WriteLine("insert player name");
 							pname = Console.ReadLine();
 							Player p = JSONOps.Deserialize.DeserializePlayer(pname);
 							p.Info();
-                            Console.WriteLine("amount of exp");
+							Console.WriteLine("amount of exp");
 							int amt = Convert.ToInt32(Console.ReadLine());
 							p.GainExp(amt);
 							p.Info();
-                            Console.WriteLine();
+							Console.WriteLine();
 							p.PrintInventory();
 							JSONOps.Serialize.SerializePlayer(p);
-							Console.ReadKey();
+							Console.Read();
 							break;
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				log.ExceptionLog(LogLevel.ERROR, ex);
+				Utility.fLog.ExceptionLog(LogLevel.ERROR, ex);
 			}
 		}
 	}
