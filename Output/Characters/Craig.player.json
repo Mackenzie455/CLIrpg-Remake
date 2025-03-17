@@ -10,21 +10,21 @@
     "GrowthType": 0
   },
   "Stats": {
-    "Health": 532,
-    "Mana": 482,
-    "Strength": 442,
-    "MagicStr": 442,
-    "Defense": 442,
-    "Dexterity": 442
+    "Health": 543,
+    "Mana": 492,
+    "Strength": 452,
+    "MagicStr": 452,
+    "Defense": 447,
+    "Dexterity": 447
   },
   "AllocationPoints": 81,
   "StatDistribution": [
-    5,
-    5,
-    5,
-    5,
-    5,
-    5
+    16,
+    15,
+    15,
+    15,
+    10,
+    10
   ],
   "Inventory": []
 }

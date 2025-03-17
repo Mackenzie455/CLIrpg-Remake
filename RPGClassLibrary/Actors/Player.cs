@@ -201,46 +201,95 @@ namespace RPGClassLibrary.Actors
 			try
 			{
 				bool Running = true;
-				while (Running)
+				do
 				{
 					Console.WriteLine("Redistribute your stats.");
-					Console.WriteLine("HEALTH, MANA, STRENGTH, MAGIC STRENGTH, DEFENSE and DEXTERITY.");
-					string input = Utility.ValidateInput("Please format your input like this. (0 0 0 0 0 0)");
+					Console.WriteLine("HEALTH, MANA, STRENGTH, MAGIC STRENGTH, DEFENSE, DEXTERITY.");
+					Console.WriteLine($"You have {AllocationPoints} points to allocate.");
+					string input = Utility.ValidateInput("Format your stats like this. (0 0 0 0 0 0)");
 
-					string[] scores = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-					List<int> ints = new List<int>();
+					string[] inputArr = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+					List<int> intList = new List<int>();
 
-					foreach (string str in scores)
+					foreach (string i in inputArr)
 					{
-						if (int.TryParse(str, out int result))
+						if (int.TryParse(i, out int result))
 						{
-							ints.Add(result);
+							intList.Add(result);
 						}
 						else
 						{
-							Console.WriteLine($"{str} is an invalid input.");
+
 						}
 					}
 
-					if (ints.Count < 6)
+					int sum = intList.Sum();
+
+					if (intList.Count < 6)
 					{
 						Console.WriteLine("You must enter a number for each stat!");
-						continue;
 					}
 
-					int[] thisStats = {this.Stats.Health, this.Stats.Mana, this.Stats.Strength, this.Stats.MagicStr, this.Stats.Defense, this.Stats.Dexterity};
-					for (int i = 0; i < this.StatDistribution.Length; i++)
+					if (sum > AllocationPoints)
 					{
-						thisStats[i] = (thisStats[i] - this.StatDistribution[0]) + ints[0];
+						Console.WriteLine($"The sum of these points exceeds {AllocationPoints} points.");
 					}
-					this.StatDistribution = ints.ToArray();
-					Running = false;
+					else if (sum < AllocationPoints)
+					{
+						Console.WriteLine($"You have {AllocationPoints - sum} missing points to allocate.");
+					}
+					else
+					{
+						// calculate base stats
+						// apply changed stats to object
+						// return 
+
+						// base stats
+						int baseHealth = this.Stats.Health - StatDistribution[0];
+						int baseMana = this.Stats.Mana - StatDistribution[1];
+						int baseStr = this.Stats.Strength - StatDistribution[2];
+						int baseMStr = this.Stats.MagicStr - StatDistribution[3];
+						int baseDef = this.Stats.Defense - StatDistribution[4];
+						int baseDex = this.Stats.Dexterity - StatDistribution[5];
+
+						// apply updated stats to object
+						this.Stats.Health = baseHealth + intList[0];
+						this.Stats.Mana = baseMana + intList[1];
+						this.Stats.Strength = baseStr + intList[2];
+						this.Stats.MagicStr = baseMStr + intList[3];
+						this.Stats.Defense = baseDef + intList[4];
+						this.Stats.Dexterity = baseDex + intList[5];
+
+						// change stat distribution
+						StatDistribution = intList.ToArray();
+						Console.WriteLine("-------------------------------");
+						Console.WriteLine($"Health: {this.Stats.Health}");
+						Console.WriteLine($"Mana: {this.Stats.Mana}");
+						Console.WriteLine($"Strength: {this.Stats.Strength}");
+						Console.WriteLine($"Magic Strength: {this.Stats.MagicStr}");
+						Console.WriteLine($"Defense: {this.Stats.Defense}");
+						Console.WriteLine($"Dexterity: {this.Stats.Dexterity}");
+						string confirm = Utility.ValidateInput("Are you happy with these stats? [Y/N]");
+
+						if (confirm == "Y")
+						{
+							Running = false;
+						}
+						else
+						{
+							continue;
+						}
+					}
 				}
+				while (Running == true);
 			}
 			catch (Exception ex)
 			{
 				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 			}
 		}
+
 	}
+
 }
+
