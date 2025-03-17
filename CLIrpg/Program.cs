@@ -40,21 +40,24 @@ namespace CLIrpg
 			{
 				while (Running)
 				{
-					Console.WriteLine("[SERIALIZE / DESERIALIZE]");
+					Console.WriteLine("[SERIALIZE / DESERIALIZE / WEAPON / REDISTRIBUTE]");
 					string input = Console.ReadLine().ToLower();
 
+					string pname = "";
 					switch (input)
 					{
 						case "weapon":
 							Weapon w = Weapon.WeaponFactory(ItemRarity.Legendary);
 							Console.ReadKey();
-							Player temp = JSONOps.Deserialize.DeserializePlayer("Craig");
+							Console.WriteLine("insert player name");
+							pname = Console.ReadLine();
+							Player temp = JSONOps.Deserialize.DeserializePlayer(pname);
 							temp.AddItemToInventory(w);
 							JSONOps.Serialize.SerializePlayer(temp);
 							break;
 						case "serialize":
 							Console.WriteLine("insert player name");
-							string pname = Console.ReadLine();
+							pname = Console.ReadLine();
 							Console.WriteLine("insert role name");
 							string rname = Console.ReadLine();
 							Player j = Player.PlayerFactory(pname, rname);
@@ -67,17 +70,28 @@ namespace CLIrpg
 						case "deserialize":
 							Console.WriteLine("insert player name");
 							pname = Console.ReadLine();
-							Player p = JSONOps.Deserialize.DeserializePlayer(pname);
-							p.Info();
+							Player d = JSONOps.Deserialize.DeserializePlayer(pname);
+							d.Info();
 							Console.WriteLine("amount of exp");
 							int amt = Convert.ToInt32(Console.ReadLine());
-							p.GainExp(amt);
-							p.Info();
+							d.GainExp(amt);
+							d.Info();
 							Console.WriteLine();
-							p.PrintInventory();
-							JSONOps.Serialize.SerializePlayer(p);
+							d.PrintInventory();
+							JSONOps.Serialize.SerializePlayer(d);
 							Console.Read();
 							break;
+
+							case "redistribute":
+							Console.WriteLine("insert player name");
+							pname = Console.ReadLine();
+							Player r = JSONOps.Deserialize.DeserializePlayer(pname);
+							r.Info();
+							r.RedistributeStats();
+							r.Info();
+							JSONOps.Serialize.SerializePlayer(r);
+							break;
+
 					}
 				}
 			}
