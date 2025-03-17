@@ -55,6 +55,11 @@ namespace RPGClassLibrary.Actors
 			}
 		}
 
+		/// <summary>
+		/// Adds a designated amount of experience to the Entity it's called from. 
+		/// Handles specialised growth as well.
+		/// </summary>
+		/// <param name="amount">The amount of EXP to add.</param>
 		public void GainExp(int amount)
 		{
 			EXP += amount;
