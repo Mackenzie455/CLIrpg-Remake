@@ -1,5 +1,4 @@
-CLIrpg/bin/
-CLIrpg/obj/
-RPGClassLibrary/bin/
-RPGClassLibrary/obj/
+*/bin/
+*/obj/
 Output/Logs/
+.vscode/

@@ -7,7 +7,7 @@ namespace CLIrpg
 {
 	internal class Program
 	{
-		public static Player player = null;
+		public static Player player = null; //public player reference
 		public static bool Running = true;
 		static void Main(string[] args)
 		{

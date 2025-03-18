@@ -39,7 +39,7 @@ namespace RPGClassLibrary.Actors
 					Console.WriteLine("Please format it like this. (0 0 0 0 0 0)");
 					string input = Console.ReadLine();
 
-					if (!String.IsNullOrEmpty(input))
+					if (String.IsNullOrEmpty(input))
 					{
 						Console.WriteLine("Invalid input.");
 						Console.ReadKey();
@@ -130,7 +130,6 @@ namespace RPGClassLibrary.Actors
 								);
 
 							Role r = new Role(roleName, roleDesc, gt);
-							//DONE: make more verbose. add GrowthType.X integration
 							Player p = new Player(playerName, r, stats, ints.ToArray());
 							return p;
 						}
@@ -195,7 +194,6 @@ namespace RPGClassLibrary.Actors
 			}
 			Console.WriteLine("---------------------------");
 		}
-
 		public void RedistributeStats()
 		{
 			try

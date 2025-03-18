@@ -48,11 +48,10 @@ namespace RPGClassLibrary.Operations
 				}
 
 				/* Handle other ItemTypes (e.g., Armor, Consumable)
-				// Add the necessary code for other item types if needed
 				if (type == ItemType.Armor)
 				{
 					// Create and return an Armor object (example)
-					return new Armor(id, name, rarity); // Assume you have an Armor class
+					return new Armor(id, name, rarity);
 				}
 				*/
 
