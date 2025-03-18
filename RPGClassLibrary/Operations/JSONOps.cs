@@ -85,9 +85,6 @@ namespace RPGClassLibrary.Operations
 				writer.WriteEndObject();
 			}
 		}
-
-
-
 		public struct Serialize
 		{
 			public static void SerializePlayer(Player player)
