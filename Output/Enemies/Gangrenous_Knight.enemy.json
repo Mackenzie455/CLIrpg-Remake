@@ -1,0 +1,41 @@
+{
+  "EXPValue": 20,
+  "Tier": 3,
+  "Name": "Gangrenous Knight",
+  "Level": 4,
+  "EXP": 0,
+  "EXPToNextLevel": 100,
+  "Money": 100,
+  "Role": {
+    "Name": "Thief",
+    "Description": null,
+    "GrowthType": 0
+  },
+  "Stats": {
+    "Health": 110,
+    "Mana": 70,
+    "Strength": 12,
+    "MagicStr": 10,
+    "Defense": 10,
+    "Dexterity": 10
+  },
+  "AllocationPoints": 20,
+  "StatDistribution": null,
+  "Inventory": [
+    {
+      "ID": 0,
+      "Name": "Tormented Stick",
+      "Rarity": 1,
+      "Type": 1,
+      "WeaponType": "Stick",
+      "Description": null,
+      "WeaponLevel": 2,
+      "Weight": 52,
+      "Value": 104,
+      "WeaponDamage": 53,
+      "EnchantmentSlots": 3,
+      "DamageType": 6,
+      "Specialization": 2
+    }
+  ]
+}

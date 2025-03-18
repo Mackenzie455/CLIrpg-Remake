@@ -40,7 +40,7 @@ namespace CLIrpg
 			{
 				while (Running)
 				{
-					Console.WriteLine("[SERIALIZE / DESERIALIZE / WEAPON / REDISTRIBUTE]");
+					Console.WriteLine("[SERIALIZE / DESERIALIZE / WEAPON / REDISTRIBUTE / STARTER / ENEMY]");
 					string input = Console.ReadLine().ToLower();
 
 					if (input == "except")
@@ -101,6 +101,20 @@ namespace CLIrpg
 							Startup.SerializeStarter();
                             Console.WriteLine("starter serialized");
 							Console.ReadKey();
+							break;
+
+						case "enemy":
+							string diff = Console.ReadLine();
+							EnemyClass ec = diff switch
+							{
+								"basic" or "b" => EnemyClass.Basic,
+								"strong" or "s" => EnemyClass.Strong,
+								"boss" => EnemyClass.Boss,
+								_ => EnemyClass.Basic
+							};
+							Enemy e = Enemy.EnemyFactory(ec, 5);
+							e.Info();
+							JSONOps.Serialize.SerializeEnemy(e);
 							break;
 
 					}

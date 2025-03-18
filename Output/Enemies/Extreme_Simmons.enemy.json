@@ -1,0 +1,41 @@
+{
+  "EXPValue": 24,
+  "Tier": 1,
+  "Name": "Extreme Simmons",
+  "Level": 4,
+  "EXP": 0,
+  "EXPToNextLevel": 100,
+  "Money": 100,
+  "Role": {
+    "Name": "Barbarian",
+    "Description": null,
+    "GrowthType": 0
+  },
+  "Stats": {
+    "Health": 130,
+    "Mana": 96,
+    "Strength": 18,
+    "MagicStr": 18,
+    "Defense": 14,
+    "Dexterity": 16
+  },
+  "AllocationPoints": 20,
+  "StatDistribution": null,
+  "Inventory": [
+    {
+      "ID": 0,
+      "Name": "Mad Wand",
+      "Rarity": 4,
+      "Type": 1,
+      "WeaponType": "Wand",
+      "Description": null,
+      "WeaponLevel": 3,
+      "Weight": 73,
+      "Value": 365,
+      "WeaponDamage": 74,
+      "EnchantmentSlots": 3,
+      "DamageType": 1,
+      "Specialization": 1
+    }
+  ]
+}

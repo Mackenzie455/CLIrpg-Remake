@@ -130,7 +130,10 @@ namespace RPGClassLibrary.Actors
 			Console.WriteLine($"    Magic Strength: {Stats.MagicStr}");
 			Console.WriteLine($"    Defense: {Stats.Defense}");
 			Console.WriteLine($"    Dexterity: {Stats.Dexterity}");
-			Console.WriteLine($"Distribution: {String.Join(", ", StatDistribution)}");
+			if (this is not Enemy)
+			{
+				Console.WriteLine($"Distribution: {String.Join(", ", StatDistribution)}");
+			}
 			Console.WriteLine($"Points to allocate: {AllocationPoints}");
 			Console.WriteLine("---------------------------");
 			Console.WriteLine("Inventory:");

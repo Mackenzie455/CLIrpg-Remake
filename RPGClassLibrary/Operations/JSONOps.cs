@@ -1,6 +1,7 @@
 ﻿using RPGClassLibrary.Actors;
 using RPGClassLibrary.Combat;
 using RPGClassLibrary.Items;
+using System.Numerics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -8,7 +9,6 @@ namespace RPGClassLibrary.Operations
 {
 	public class JSONOps
 	{
-		public static LoggingService log = new LoggingService(Sender.BACK);
 		static JsonSerializerOptions options = new JsonSerializerOptions()
 		{
 			WriteIndented = true,
@@ -98,7 +98,22 @@ namespace RPGClassLibrary.Operations
 				}
 				catch (Exception ex)
 				{
-					log.Log(LogLevel.ERROR, ex.Message);
+					Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
+				}
+			}
+
+			public static void SerializeEnemy(Enemy enemy)
+			{
+				try
+				{
+					string path = Path.Combine(Utility.GetBasePath(), "Output", "Enemies", $"{enemy.Name.Replace(" ", "_")}.enemy.json");
+					string json = JsonSerializer.Serialize(enemy, options);
+
+					File.WriteAllText(path, json);
+				}
+				catch (Exception ex)
+				{
+					Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 				}
 			}
 		}
@@ -115,7 +130,23 @@ namespace RPGClassLibrary.Operations
 				}
 				catch (Exception ex)
 				{
-					log.Log(LogLevel.ERROR, ex.Message);
+					Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
+					return null;
+				}
+			}
+
+			public static Enemy DeserializeEnemy(string enemyName)
+			{
+				try
+				{
+					string path = Path.Combine(Utility.GetBasePath(), "Output", "Enemies", $"{enemyName.Replace(" ", "_")}.player.json");
+					string json = File.ReadAllText(path);
+					Enemy e = JsonSerializer.Deserialize<Enemy>(json, options);
+					return e;
+				}
+				catch (Exception ex)
+				{
+					Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 					return null;
 				}
 			}

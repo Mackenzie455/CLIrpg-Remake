@@ -1,0 +1,41 @@
+{
+  "EXPValue": 24,
+  "Tier": 1,
+  "Name": "Blighted Cave Dweller",
+  "Level": 4,
+  "EXP": 0,
+  "EXPToNextLevel": 100,
+  "Money": 100,
+  "Role": {
+    "Name": "Battlemage",
+    "Description": null,
+    "GrowthType": 0
+  },
+  "Stats": {
+    "Health": 130,
+    "Mana": 96,
+    "Strength": 18,
+    "MagicStr": 18,
+    "Defense": 14,
+    "Dexterity": 16
+  },
+  "AllocationPoints": 20,
+  "StatDistribution": null,
+  "Inventory": [
+    {
+      "ID": 0,
+      "Name": "Cursed Dagger",
+      "Rarity": 0,
+      "Type": 1,
+      "WeaponType": "Dagger",
+      "Description": null,
+      "WeaponLevel": 3,
+      "Weight": 10,
+      "Value": 10,
+      "WeaponDamage": 11,
+      "EnchantmentSlots": 3,
+      "DamageType": 5,
+      "Specialization": 1
+    }
+  ]
+}

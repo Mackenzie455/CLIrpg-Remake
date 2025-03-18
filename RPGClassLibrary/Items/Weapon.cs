@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace RPGClassLibrary.Items
 {
-    public enum WeaponSpec
+	public enum WeaponSpec
 	{
 		None,
 		Physical,
@@ -108,10 +108,10 @@ namespace RPGClassLibrary.Items
 					int damage = (level + 1) * weight;
 					int slots = 3;
 
-                    Console.WriteLine("Are you sure you want to create this weapon? [Y/N]");
-                    Console.WriteLine($"{Name}, {Type}, {Desc} / {rarity}");
-                    Console.WriteLine($"{dt} / {ws}");
-                    Console.WriteLine($"LVL: {level}, WGT: {weight}, VAL: {value}, DMG: {damage}");
+					Console.WriteLine("Are you sure you want to create this weapon? [Y/N]");
+					Console.WriteLine($"{Name}, {Type}, {Desc} / {rarity}");
+					Console.WriteLine($"{dt} / {ws}");
+					Console.WriteLine($"LVL: {level}, WGT: {weight}, VAL: {value}, DMG: {damage}");
 					string confirmation = Console.ReadLine().ToUpper().Trim();
 					if (confirmation == "Y")
 					{
@@ -130,7 +130,7 @@ namespace RPGClassLibrary.Items
 					}
 					else
 					{
-                        Console.WriteLine("Re-input your stats.");
+						Console.WriteLine("Re-input your stats.");
 					}
 					// TODO: handle effects and enchantments
 				}
@@ -141,6 +141,90 @@ namespace RPGClassLibrary.Items
 				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 				return null;
 			}
+		}
+		public static Weapon EnemyWeaponFactory(int enemyDifficulty)
+		{
+			try
+			{
+				string basePath = Utility.GetBasePath();
+				Random ran = new Random();
+
+				int ID = 0;
+				string[] descriptors = File.ReadAllLines(Path.Combine(basePath, "Assets", "Descriptors.txt"));
+				string[] wType = File.ReadAllLines(Path.Combine(basePath, "Assets", "WeaponTypes.txt"));
+
+				string weaponType = wType[ran.Next(0, wType.Length)];
+				string weaponName = $"{descriptors[ran.Next(0, descriptors.Length)]} {weaponType}";
+				string desc = null;
+
+				int dtIndex = ran.Next(0, Enum.GetNames(typeof(DamageType)).Length);
+				DamageType dt = dtIndex switch
+				{
+					0 => DamageType.None,
+					1 => DamageType.Magic,
+					2 => DamageType.Physical,
+					3 => DamageType.Fire,
+					4 => DamageType.Ice,
+					5 => DamageType.Electric,
+					6 => DamageType.Poison,
+					_ => DamageType.None
+				};
+
+				int wsIndex = ran.Next(0, Enum.GetNames(typeof(WeaponSpec)).Length);
+				WeaponSpec ws = wsIndex switch
+				{
+					0 => WeaponSpec.None,
+					1 => WeaponSpec.Physical,
+					2 => WeaponSpec.Magic,
+					3 => WeaponSpec.Hybrid,
+					_ => WeaponSpec.None
+				};
+
+				int rarityIndex = ran.Next(0, Enum.GetNames(typeof(ItemRarity)).Length);
+				ItemRarity rarity = rarityIndex switch
+				{
+					0 => ItemRarity.Common,
+					1 => ItemRarity.Uncommon,
+					2 => ItemRarity.Rare,
+					3 => ItemRarity.Extraordinary,
+					4 => ItemRarity.Legendary,
+					_ => ItemRarity.Common
+				};
+
+				//stat calculation
+				int weaponLevel = 1 + ((enemyDifficulty / 2) + Startup.GlobalDifficultyModifier);
+				int weaponWeight = ran.Next(5 + weaponLevel, 80 + (enemyDifficulty / 2));
+				int weaponDamage = weaponWeight + ((enemyDifficulty / 3) + Startup.GlobalDifficultyModifier);
+				int weaponValue = weaponWeight * ((int)rarity + 1);
+				int weaponSlots = 3;
+
+
+				//weapon declaration
+				Weapon w = new Weapon(
+					iD: ID,
+					name: weaponName,
+					weaponType: weaponType,
+					description: desc,
+					damageType: dt,
+					spec: ws,
+					rarity: rarity
+					)
+					.SetStats(
+					level: weaponLevel, 
+					weight: weaponWeight, 
+					value: weaponValue, 
+					dmg: weaponDamage, 
+					slots: weaponSlots
+					);
+
+				return w;
+			}
+			catch (Exception ex)
+			{
+				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
+			}
+
+			return null;
 		}
 	}
 }

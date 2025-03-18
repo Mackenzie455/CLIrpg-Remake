@@ -1,0 +1,41 @@
+{
+  "EXPValue": 12,
+  "Tier": 1,
+  "Name": "Radical Craig",
+  "Level": 2,
+  "EXP": 0,
+  "EXPToNextLevel": 100,
+  "Money": 100,
+  "Role": {
+    "Name": "Mage",
+    "Description": null,
+    "GrowthType": 0
+  },
+  "Stats": {
+    "Health": 101,
+    "Mana": 51,
+    "Strength": 11,
+    "MagicStr": 11,
+    "Defense": 11,
+    "Dexterity": 11
+  },
+  "AllocationPoints": 20,
+  "StatDistribution": null,
+  "Inventory": [
+    {
+      "ID": 0,
+      "Name": "Cunning Grimoire",
+      "Rarity": 2,
+      "Type": 1,
+      "WeaponType": "Grimoire",
+      "Description": null,
+      "WeaponLevel": 2,
+      "Weight": 68,
+      "Value": 204,
+      "WeaponDamage": 69,
+      "EnchantmentSlots": 3,
+      "DamageType": 4,
+      "Specialization": 3
+    }
+  ]
+}

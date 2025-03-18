@@ -1,0 +1,41 @@
+{
+  "EXPValue": 64,
+  "Tier": 3,
+  "Name": "Excellent Gangster",
+  "Level": 8,
+  "EXP": 0,
+  "EXPToNextLevel": 100,
+  "Money": 100,
+  "Role": {
+    "Name": "Battlemage",
+    "Description": null,
+    "GrowthType": 0
+  },
+  "Stats": {
+    "Health": 230,
+    "Mana": 226,
+    "Strength": 48,
+    "MagicStr": 58,
+    "Defense": 34,
+    "Dexterity": 46
+  },
+  "AllocationPoints": 20,
+  "StatDistribution": null,
+  "Inventory": [
+    {
+      "ID": 0,
+      "Name": "Extreme Crossbow",
+      "Rarity": 0,
+      "Type": 1,
+      "WeaponType": "Crossbow",
+      "Description": null,
+      "WeaponLevel": 8,
+      "Weight": 79,
+      "Value": 79,
+      "WeaponDamage": 84,
+      "EnchantmentSlots": 3,
+      "DamageType": 6,
+      "Specialization": 2
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+Archer
+Lancer
+Barbarian
+Mage
+Goblin
+Swordfighter
+Battlemage
+Bandit
+Thief
