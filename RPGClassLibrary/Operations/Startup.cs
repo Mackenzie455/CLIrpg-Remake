@@ -17,15 +17,31 @@ namespace RPGClassLibrary.Operations
 		public static bool AutoLoadCharacter { get; set; } = true;
 		public static bool DebugOn { get; set; } = false;
 
+		public static void SerializeStarter()
+		{
+			try
+			{
+				Startup config = new Startup();
+				string path = Path.Combine(Utility.GetBasePath(), "Output", "start.config.json");
+				string json = JsonSerializer.Serialize(config);
+
+				File.WriteAllText(path, json);
+			}
+			catch (Exception ex)
+			{
+				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
+			}
+		}
+
 		public static void StartupSeq()
 		{
 			if (!File.Exists(Path.Combine(Utility.GetBasePath(), "Output") ))
 			{
 				Utility.CreateFileSystem();
 			}
-			string objPath = Path.Combine(Utility.GetBasePath(), "Output", "Startup.config.json");
+			string objPath = Path.Combine(Utility.GetBasePath(), "Output", "start.config.json");
 			string json = File.ReadAllText(objPath);
-			
+			Startup config = JsonSerializer.Deserialize<Startup>(json);
 		}
 	}
 }

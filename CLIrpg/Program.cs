@@ -43,6 +43,11 @@ namespace CLIrpg
 					Console.WriteLine("[SERIALIZE / DESERIALIZE / WEAPON / REDISTRIBUTE]");
 					string input = Console.ReadLine().ToLower();
 
+					if (input == "except")
+					{
+						throw new Exception("test");
+					}
+
 					string pname = "";
 					switch (input)
 					{
@@ -90,6 +95,12 @@ namespace CLIrpg
 							r.RedistributeStats();
 							r.Info();
 							JSONOps.Serialize.SerializePlayer(r);
+							break;
+
+						case "starter":
+							Startup.SerializeStarter();
+                            Console.WriteLine("starter serialized");
+							Console.ReadKey();
 							break;
 
 					}

@@ -33,7 +33,7 @@ namespace RPGClassLibrary.Operations
 				string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 				DirectoryInfo? directory = new DirectoryInfo(baseDirectory);
 
-				while (baseDirectory != null && directory.Name != "CommandLineRPG")
+				while (baseDirectory != null && directory.Name != "CLIrpg-Remake")
 				{
 					directory = directory.Parent;
 				}

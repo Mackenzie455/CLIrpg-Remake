@@ -152,23 +152,23 @@ namespace RPGClassLibrary.Actors
 		}
 		public void PrintInventory()
 		{
-			Console.WriteLine("---------------------------");
 			if (Inventory != null || Inventory.Count <= 0)
 			{
 				foreach (var item in Inventory)
 				{
 					if (item is Weapon wx)
 					{
-						Console.WriteLine($"	Name: {wx.Name}");
-						Console.WriteLine($"	Description: {wx.Description}");
-						Console.WriteLine($"	Type: {wx.WeaponType}");
-						Console.WriteLine($"	Rarity:{wx.Rarity}");
+						Console.WriteLine("[ITEM]");
+						Console.WriteLine($"Name: {wx.Name}");
+						Console.WriteLine($"Description: {wx.Description}");
+						Console.WriteLine($"Type: {wx.WeaponType}");
+						Console.WriteLine($"Rarity:{wx.Rarity}");
 						Console.WriteLine();
-						Console.WriteLine($"	Weight: {wx.Weight}");
-						Console.WriteLine($"	Value: {wx.Value}");
-						Console.WriteLine($"	Specialization: {wx.Specialization}");
+						Console.WriteLine($"Weight: {wx.Weight}");
+						Console.WriteLine($"Value: {wx.Value}");
+						Console.WriteLine($"Specialization: {wx.Specialization}");
 						Console.WriteLine();
-						Console.WriteLine($"	Damage: {wx.WeaponDamage}");
+						Console.WriteLine($"Damage: {wx.WeaponDamage}");
 						Console.WriteLine("[EFFECTS]");
 						foreach (Effect eff in wx.Effects)
 						{
@@ -185,7 +185,7 @@ namespace RPGClassLibrary.Actors
 					{
 
 					}
-					Console.WriteLine();
+					Console.WriteLine("");
 				}
 			}
 			else

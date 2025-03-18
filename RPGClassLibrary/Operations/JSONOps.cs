@@ -22,7 +22,7 @@ namespace RPGClassLibrary.Operations
 				var jsonDoc = JsonDocument.ParseValue(ref reader);
 				var jsonObject = jsonDoc.RootElement;
 
-				Console.WriteLine(jsonObject.ToString());
+				//Console.WriteLine(jsonObject.ToString());
 
 				int id = jsonObject.GetProperty("ID").GetInt32();
 				string name = jsonObject.GetProperty("Name").GetString();
