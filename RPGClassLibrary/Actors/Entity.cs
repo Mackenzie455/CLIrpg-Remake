@@ -4,6 +4,15 @@ using RPGClassLibrary.Operations;
 
 namespace RPGClassLibrary.Actors
 {
+	public enum StatTypes
+	{
+		Health,
+		Mana,
+		Strength,
+		MagicStr,
+		Defense,
+		Dexterity
+	}
 	public abstract class Entity
 	{
 		public string Name { get; set; }
@@ -20,6 +29,7 @@ namespace RPGClassLibrary.Actors
 
 		//------------Belongings-----------
 		public List<Item> Inventory { get; set; }
+		public List<Effect> CurrentEffects { get; set; }
 
 		//--------Constructor------------
 		protected Entity(string name, Role role, int level = 1)
@@ -32,6 +42,7 @@ namespace RPGClassLibrary.Actors
 			EXPToNextLevel = 100;  // Example value
 			Stats = new EntityStats();
 			Inventory = new List<Item>();
+			CurrentEffects = new List<Effect>();
 		}
 		protected Entity() { }
 		public class EntityStats
@@ -152,15 +163,28 @@ namespace RPGClassLibrary.Actors
 			}
 		}
 
+		public void ApplyEffect(Effect e)
+		{
+			try
+			{
+				this.CurrentEffects.Add(e);
+			}
+			catch (Exception ex)
+			{
+				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
+			}
+		}
 
-	}
-	public enum StatTypes
-	{
-		Health,
-		Mana,
-		Strength,
-		MagicStr,
-		Defense,
-		Dexterity
+		public void EffectExecutor(Effect e)
+		{
+			try
+			{
+
+			}
+			catch (Exception ex)
+			{
+				Utility.bLog.ExceptionLog()
+			}
+		}
 	}
 }
