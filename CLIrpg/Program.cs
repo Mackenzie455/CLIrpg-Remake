@@ -40,7 +40,7 @@ namespace CLIrpg
 			{
 				while (Running)
 				{
-					Console.WriteLine("[SERIALIZE / DESERIALIZE / WEAPON / REDISTRIBUTE / STARTER / ENEMY]");
+					Console.WriteLine("[SERIALIZE / DESERIALIZE / WEAPON / REDISTRIBUTE / STARTER / ENEMY / EFFECT]");
 					string input = Console.ReadLine().ToLower();
 
 					if (input == "except")
@@ -87,7 +87,18 @@ namespace CLIrpg
 							Console.Read();
 							break;
 
-							case "redistribute":
+						case "exp":
+							Console.WriteLine("insert player name");
+							pname = Console.ReadLine();
+							Player plrgrg = JSONOps.Deserialize.DeserializePlayer(pname);
+                            Console.WriteLine("How much exp?");
+							int amount = Convert.ToInt32(Console.ReadLine());
+							plrgrg.GainExp(amount);
+							JSONOps.Serialize.SerializePlayer(plrgrg);
+							Console.ReadLine();
+							break;
+
+						case "redistribute":
 							Console.WriteLine("insert player name");
 							pname = Console.ReadLine();
 							Player r = JSONOps.Deserialize.DeserializePlayer(pname);
@@ -98,7 +109,7 @@ namespace CLIrpg
 							break;
 
 						case "starter":
-							Startup.SerializeStarter();
+							Settings.SerializeStarter();
                             Console.WriteLine("starter serialized");
 							Console.ReadKey();
 							break;
@@ -116,6 +127,17 @@ namespace CLIrpg
 							e.Info();
 							JSONOps.Serialize.SerializeEnemy(e);
 							break;
+
+						case "effect":
+							Effect effect = new Effect("Curse", 10, 3, 100, EffectType.Curse);
+							Player ep = JSONOps.Deserialize.DeserializePlayer("Craig");
+							ep.AddEffect(effect);
+							JSONOps.Serialize.SerializePlayer(ep);
+							ep.EffectExecutor();
+							ep.Info();
+							Console.ReadKey();
+							break;
+
 
 					}
 				}

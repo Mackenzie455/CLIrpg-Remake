@@ -162,12 +162,46 @@ namespace RPGClassLibrary.Actors
 				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 			}
 		}
-
-		public void ApplyEffect(Effect e)
+		public void AddEffect(Effect e)
 		{
 			try
 			{
-				this.CurrentEffects.Add(e);
+
+				var existingEffect = this.CurrentEffects.FirstOrDefault(effect => effect.Name == e.Name);
+				if (existingEffect != null)
+				{
+					existingEffect.Duration = Math.Max(existingEffect.Duration, e.Duration);
+					existingEffect.Strength = Math.Max(existingEffect.Strength, e.Strength);
+				}
+				else
+				{
+					this.CurrentEffects.Add(e);
+				}
+			}
+			catch (Exception ex)
+			{
+				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
+			}
+		}
+		public void EffectExecutor(int effectModifier = 10)
+		{
+			try
+			{
+				List<Effect> Expired = new List<Effect>();
+
+				foreach (Effect effect in this.CurrentEffects)
+				{
+					if (effect.IsBuff())
+					{
+						ApplyBuff(effect, effectModifier);
+					}
+					else if (effect.IsDebuff())
+					{
+						ApplyDebuff(effect, effectModifier);
+					}
+				}
+
+				//TODO: expiry logic here
 			}
 			catch (Exception ex)
 			{
@@ -175,16 +209,130 @@ namespace RPGClassLibrary.Actors
 			}
 		}
 
-		public void EffectExecutor(Effect e)
+		public void ApplyBuff(Effect effect, int effectModifier)
 		{
 			try
 			{
+				ConsoleColor color = Settings.DefaultConsoleColor;
+				Random ran = new Random();
+				switch (effect.Type)
+				{
+					case EffectType.Regeneration: 
 
+						break;
+
+					case EffectType.ManaRegen:
+						
+						break;
+
+					case EffectType.Haste: 
+
+						break;
+
+					case EffectType.Strength:
+						int strength = effect.Strength + effectModifier;
+						this.Stats.Strength = strength;
+
+						Console.ForegroundColor = ConsoleColor.Green;
+						Console.WriteLine($"{this.Name} has become stronger! Defense increased by {strength}!");
+						Console.ForegroundColor = color;
+						break;
+
+					case EffectType.Resistance:
+						int resistance = effect.Strength + effectModifier;
+						this.Stats.Defense += resistance;
+
+						Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"{this.Name} has become more resistant! Defense increased by {resistance}!");
+						Console.ForegroundColor = color;
+						break;
+				}
 			}
 			catch (Exception ex)
 			{
-				Utility.bLog.ExceptionLog()
+				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 			}
+		}
+		public void ApplyDebuff(Effect effect, int effectModifier)
+		{
+			try
+			{
+				ConsoleColor color = Settings.DefaultConsoleColor;
+				Random ran = new Random();
+				switch (effect.Type)
+				{
+					case EffectType.Burn or EffectType.Poison:
+						int damage = Math.Max(1, 1 + (effectModifier * effect.Strength) - this.Stats.Strength);
+						this.Stats.Health -= damage;
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine($"{this.Name} took {damage} damage from the {effect.Type.ToString().ToLower()}!");
+						Console.ForegroundColor = color;
+						break;
+
+					case EffectType.Frozen:
+						int freezeChance = ran.Next(0, 20) + effect.Strength;
+						if (freezeChance > 18)
+						{
+							Console.ForegroundColor = ConsoleColor.Red;
+							Console.WriteLine($"{Name} is frozen solid and cannot act this turn!");
+							Console.ForegroundColor = color;
+						}
+						else
+						{
+							Console.ForegroundColor = ConsoleColor.Yellow;
+							Console.WriteLine($"{Name}'s accuracy is reduced due to being frozen.");
+							Console.ForegroundColor = color;
+
+							//TODO: logic
+						}
+						break;
+
+					case EffectType.Weakness:
+						int weakness = effect.Strength + (effectModifier + 1);
+						this.Stats.Strength -= weakness;
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine($"{this.Name} has lost {weakness} strength due to their weakness!");
+						Console.ForegroundColor = color;
+						break;
+
+					case EffectType.Slowness:
+						int slowness = effect.Strength + (effectModifier + 1);
+						this.Stats.Dexterity -= slowness;
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine($"{this.Name} has lost {slowness} dexterity due to their slowness! Reaction time and dodging is harder!");
+						Console.ForegroundColor = color;
+						break;
+
+					case EffectType.ManaSickness:
+						int sickness = effect.Strength + (effectModifier * 2);
+						this.Stats.Mana -= sickness;
+						this.Stats.MagicStr -= sickness;
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine($"{this.Name} has come down with mana sickness! Mana and Magic Strength reduced by {sickness}!");
+						Console.ForegroundColor = color;
+						break;
+
+					case EffectType.Curse:
+						int curse = (int)Math.Round((decimal)effect.Strength + effectModifier, 2);
+
+						this.Stats.Health -= Math.Max(0, curse);
+						this.Stats.Mana -= Math.Max(0, curse);
+						this.Stats.Strength -= Math.Max(0, curse);
+						this.Stats.MagicStr -= Math.Max(0, curse);
+						this.Stats.Defense -= Math.Max(0, curse);
+						this.Stats.Dexterity -= Math.Max(0, curse);
+
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine($"A dark magic attack curses {this.Name}! All stats reduced by {curse}!");
+						Console.ForegroundColor = color;
+						break;
+				}
+			}
+			catch (Exception ex)
+			{
+				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
+			}
+
 		}
 	}
 }

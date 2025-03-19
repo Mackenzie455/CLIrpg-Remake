@@ -1,61 +1,55 @@
 {
   "Name": "Craig",
-  "Level": 57,
-  "EXP": 302232,
-  "EXPToNextLevel": 2680297,
+  "Level": 33,
+  "EXP": 31842,
+  "EXPToNextLevel": 33718,
   "Money": 100,
   "Role": {
-    "Name": "Cool Guy",
+    "Name": "Craig",
     "Description": null,
     "GrowthType": 0
   },
   "Stats": {
-    "Health": 469,
-    "Mana": 419,
-    "Strength": 379,
-    "MagicStr": 379,
-    "Defense": 379,
-    "Dexterity": 379
+    "Health": 261,
+    "Mana": 181,
+    "Strength": 141,
+    "MagicStr": 141,
+    "Defense": 141,
+    "Dexterity": 141
   },
-  "AllocationPoints": 76,
+  "AllocationPoints": 52,
   "StatDistribution": [
-    5,
-    5,
-    5,
-    5,
-    5,
-    5
+    30,
+    0,
+    0,
+    0,
+    0,
+    0
   ],
   "Inventory": [
     {
       "ID": 0,
-      "Name": "Freakblade",
+      "Name": "C",
       "Rarity": 4,
       "Type": 1,
-      "WeaponType": "Freaky Sword",
-      "Description": "Freaky...",
+      "WeaponType": "C",
+      "Description": "C",
       "WeaponLevel": 1,
-      "Weight": 84,
-      "Value": 336,
-      "WeaponDamage": 168,
-      "EnchantmentSlots": 3,
-      "DamageType": 1,
-      "Specialization": 2
-    },
-    {
-      "ID": 0,
-      "Name": "D",
-      "Rarity": 4,
-      "Type": 1,
-      "WeaponType": "D",
-      "Description": "D",
-      "WeaponLevel": 1,
-      "Weight": 97,
-      "Value": 388,
-      "WeaponDamage": 194,
+      "Weight": 130,
+      "Value": 520,
+      "WeaponDamage": 260,
       "EnchantmentSlots": 3,
       "DamageType": 0,
       "Specialization": 0
+    }
+  ],
+  "CurrentEffects": [
+    {
+      "Name": "Curse",
+      "Type": 7,
+      "Strength": 10,
+      "Duration": 3,
+      "Chance": 100
     }
   ]
 }

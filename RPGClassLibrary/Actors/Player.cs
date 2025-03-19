@@ -16,6 +16,7 @@ namespace RPGClassLibrary.Actors
 			StatDistribution = statDist;
 			AllocationPoints = 20;
 			Inventory = new List<Item>();
+			CurrentEffects = new List<Effect>();
 		}
 
 		public Player() { }

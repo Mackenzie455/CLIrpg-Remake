@@ -192,9 +192,9 @@ namespace RPGClassLibrary.Items
 				};
 
 				//stat calculation
-				int weaponLevel = 1 + ((enemyDifficulty / 2) + Startup.GlobalDifficultyModifier);
+				int weaponLevel = 1 + ((enemyDifficulty / 2) + Settings.GlobalDifficultyModifier);
 				int weaponWeight = ran.Next(5 + weaponLevel, 80 + (enemyDifficulty / 2));
-				int weaponDamage = weaponWeight + ((enemyDifficulty / 3) + Startup.GlobalDifficultyModifier);
+				int weaponDamage = weaponWeight + ((enemyDifficulty / 3) + Settings.GlobalDifficultyModifier);
 				int weaponValue = weaponWeight * ((int)rarity + 1);
 				int weaponSlots = 3;
 

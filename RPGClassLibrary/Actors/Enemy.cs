@@ -19,8 +19,9 @@ namespace RPGClassLibrary.Actors
 	public class Enemy : Entity
 	{
 		public int EXPValue { get; set; }
+		public int Difficulty { get; set; }
 		public EnemyClass Tier { get; set; }
-		public Enemy(string name, Role role, EntityStats stats, EnemyClass tier, int lvl, int expVal) : base(name, role)
+		public Enemy(string name, Role role, EntityStats stats, EnemyClass tier, int lvl, int expVal, int difficulty = 1) : base(name, role)
 		{
 			Stats = stats;
 			Money = 100;
@@ -29,6 +30,7 @@ namespace RPGClassLibrary.Actors
 			Tier = tier;
 			AllocationPoints = 20;
 			Inventory = new List<Item>();
+			Difficulty = difficulty;
 		}
 
 		public static Enemy EnemyFactory(EnemyClass enemyTier, int playerLevel)
@@ -65,16 +67,16 @@ namespace RPGClassLibrary.Actors
 				Role enemyRole = new Role(ERName, null, GrowthType.Balanced);
 
 				//enemy stats
-				int enemyHealth = 100 + (enemyDifficulty * 10) + (int)(100 * (Startup.GlobalDifficultyModifier * 0.1));
+				int enemyHealth = 100 + (enemyDifficulty * 10) + (int)(100 * (Settings.GlobalDifficultyModifier * 0.1));
 				int enemyMStr = 10 + (enemyDifficulty * 4);
 				int enemyMana = 50 + (enemyDifficulty * 5) + (enemyMStr * 2);
 
-				int enemyStr = 10 + (enemyDifficulty * 3) + (Startup.GlobalDifficultyModifier * 2);
+				int enemyStr = 10 + (enemyDifficulty * 3) + (Settings.GlobalDifficultyModifier * 2);
 				int enemyDef = 10 + (enemyDifficulty * 2);
 				int enemyDex = 10 + (enemyDifficulty * 3);
 
 				int enemyLevel = 1 + (int)Math.Pow(playerLevel + enemyDifficulty, 0.7);
-				int enemyEXPVal = (enemyLevel * 5) + ((enemyDifficulty * 2) * Startup.GlobalDifficultyModifier);
+				int enemyEXPVal = (enemyLevel * 5) + ((enemyDifficulty * 2) * Settings.GlobalDifficultyModifier);
 
 
 				EntityStats enemyStats = new EntityStats(
@@ -94,7 +96,8 @@ namespace RPGClassLibrary.Actors
 					stats: enemyStats,
 					lvl: enemyLevel,
 					expVal: enemyEXPVal,
-					tier: enemyTier
+					tier: enemyTier,
+					difficulty: enemyDifficulty
 					);
 
 				//enemy weapon
