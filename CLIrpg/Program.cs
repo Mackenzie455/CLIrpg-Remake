@@ -91,7 +91,7 @@ namespace CLIrpg
 							Console.WriteLine("insert player name");
 							pname = Console.ReadLine();
 							Player plrgrg = JSONOps.Deserialize.DeserializePlayer(pname);
-                            Console.WriteLine("How much exp?");
+							Console.WriteLine("How much exp?");
 							int amount = Convert.ToInt32(Console.ReadLine());
 							plrgrg.GainExp(amount);
 							JSONOps.Serialize.SerializePlayer(plrgrg);
@@ -110,7 +110,7 @@ namespace CLIrpg
 
 						case "starter":
 							Settings.SerializeStarter();
-                            Console.WriteLine("starter serialized");
+							Console.WriteLine("starter serialized");
 							Console.ReadKey();
 							break;
 
@@ -129,16 +129,27 @@ namespace CLIrpg
 							break;
 
 						case "effect":
-							Effect effect = new Effect("Curse", 10, 5, 3, 100, EffectType.Curse);
+							Console.WriteLine("Insert effect to give.");
+							string eff = Console.ReadLine();
 							Player ep = JSONOps.Deserialize.DeserializePlayer("Craig");
+							Effect effect = Effect.EffectGen(eff, 10, 3, 100);
 							ep.EffectHandler.AddEffect(effect);
 							JSONOps.Serialize.SerializePlayer(ep);
 							ep.EffectHandler.EffectExecutor();
 							ep.Info();
-							Console.ReadKey();
+							Console.Read();
 							//TODO: refactor logic
 							break;
 
+						case "process":
+							Player plr = JSONOps.Deserialize.DeserializePlayer("Craig");
+							plr.Stats.ShowStats();
+							plr.EffectHandler.EffectExecutor();
+							Console.WriteLine();
+							plr.Stats.ShowStats();
+							JSONOps.Serialize.SerializePlayer(plr);
+							Console.Read();
+							break;
 
 					}
 				}

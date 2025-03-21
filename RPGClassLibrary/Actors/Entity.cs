@@ -1,6 +1,7 @@
 ﻿using RPGClassLibrary.Items;
 using RPGClassLibrary.Mechanics;
 using RPGClassLibrary.Operations;
+using System.Text.Json.Serialization;
 
 namespace RPGClassLibrary.Actors
 {
@@ -30,6 +31,8 @@ namespace RPGClassLibrary.Actors
 		//------------Belongings-----------
 		public List<Item> Inventory { get; set; }
 		public List<Effect> CurrentEffects { get; set; }
+		
+		[JsonIgnore]
 		public EffectHandler EffectHandler { get; set; }
 
 		//--------Constructor------------
@@ -67,6 +70,16 @@ namespace RPGClassLibrary.Actors
 				MagicStr = _mstr;
 				Defense = _def;
 				Dexterity = _dex;
+			}
+
+			public void ShowStats()
+			{
+				Console.WriteLine($"Health: {this.Health}");
+				Console.WriteLine($"Mana: {this.Mana}");
+				Console.WriteLine($"Strength: {this.Strength}");
+				Console.WriteLine($"Magic Strength: {this.MagicStr}");
+				Console.WriteLine($"Defense: {this.Defense}");
+				Console.WriteLine($"Dexterity: {this.Dexterity}");
 			}
 		}
 

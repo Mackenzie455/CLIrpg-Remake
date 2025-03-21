@@ -26,7 +26,6 @@ namespace RPGClassLibrary.Actors
 		{
 			// Will automatically run whenever a player object is deserialized
 			// Assigns the EffectHandler to the player
-			Utility.bLog.Log(LogLevel.DEBUG, $"{this.Name} effect handler assigned.");
 			this.EffectHandler = new EffectHandler(this);
 		}
 

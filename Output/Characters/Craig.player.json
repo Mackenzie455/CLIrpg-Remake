@@ -43,13 +43,5 @@
       "Specialization": 0
     }
   ],
-  "CurrentEffects": [
-    {
-      "Name": "Curse",
-      "Type": 7,
-      "Strength": 10,
-      "Duration": 3,
-      "Chance": 100
-    }
-  ]
+  "CurrentEffects": []
 }
