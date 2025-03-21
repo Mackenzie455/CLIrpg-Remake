@@ -129,11 +129,11 @@ namespace CLIrpg
 							break;
 
 						case "effect":
-							Effect effect = new Effect("Curse", 10, 0, 100, EffectType.Curse);
+							Effect effect = new Effect("Curse", 10, 5, 3, 100, EffectType.Curse);
 							Player ep = JSONOps.Deserialize.DeserializePlayer("Craig");
-							ep.AddEffect(effect);
+							ep.EffectHandler.AddEffect(effect);
 							JSONOps.Serialize.SerializePlayer(ep);
-							ep.EffectExecutor();
+							ep.EffectHandler.EffectExecutor();
 							ep.Info();
 							Console.ReadKey();
 							//TODO: refactor logic

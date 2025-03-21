@@ -16,13 +16,15 @@ namespace RPGClassLibrary.Mechanics
 		public string Name { get; set; }
 		public EffectType Type { get; set; }
 		public int Strength { get; set; }
+		public int Modifier { get; set; }
 		public int Duration { get; set; }
 		public int Chance { get; set; }
 
-		public Effect(string name, int strength, int duration, int chance, EffectType type)
+		public Effect(string name, int strength, int mod, int duration, int chance, EffectType type)
 		{
 			Name = name;
 			Strength = strength;
+			Modifier = mod;
 			Duration = duration;
 			Chance = Math.Clamp(chance, 0, 100);
 			Type = type;
@@ -86,23 +88,24 @@ namespace RPGClassLibrary.Mechanics
 					if (effect.Duration <= 0)
 					{
 						Expired.Add(effect);
-						break;
 					}
-
-					if (effect.IsBuff())
+					else
 					{
-						ApplyBuff(effect, effectModifier);
+						if (effect.IsBuff())
+						{
+							ApplyBuff(effect);
+						}
+						else if (effect.IsDebuff())
+						{
+							ApplyDebuff(effect);
+						}
 					}
-					else if (effect.IsDebuff())
-					{
-						ApplyDebuff(effect, effectModifier);
-					}
-
 					effect.Duration--; //decrements the effect duration. if it reaches 0 then its added to the expiry list
 				}
 
 				foreach (Effect expired in Expired)
 				{
+					ClearEffect(expired);
 					Console.WriteLine($"{entity.Name}'s {expired.Name} has worn off!");
 					entity.CurrentEffects.Remove(expired);
 				}
@@ -112,7 +115,7 @@ namespace RPGClassLibrary.Mechanics
 				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 			}
 		}
-		public void ApplyBuff(Effect effect, int effectModifier)
+		public void ApplyBuff(Effect effect)
 		{
 			try
 			{
@@ -129,7 +132,7 @@ namespace RPGClassLibrary.Mechanics
 						break;
 
 					case EffectType.Haste:
-						int haste = effect.Strength + effectModifier;
+						int haste = effect.Strength + effect.Modifier;
 						entity.Stats.Dexterity += haste;
 						Console.ForegroundColor = ConsoleColor.Green;
 						Console.WriteLine($"{entity.Name} has become faster! Dexterity increased by {haste}!");
@@ -137,7 +140,7 @@ namespace RPGClassLibrary.Mechanics
 						break;
 
 					case EffectType.Strength:
-						int strength = effect.Strength + effectModifier;
+						int strength = effect.Strength + effect.Modifier;
 						entity.Stats.Strength += strength;
 
 						Console.ForegroundColor = ConsoleColor.Green;
@@ -146,7 +149,7 @@ namespace RPGClassLibrary.Mechanics
 						break;
 
 					case EffectType.Resistance:
-						int resistance = effect.Strength + effectModifier;
+						int resistance = effect.Strength + effect.Modifier;
 						entity.Stats.Defense += resistance;
 
 						Console.ForegroundColor = ConsoleColor.Green;
@@ -160,7 +163,7 @@ namespace RPGClassLibrary.Mechanics
 				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 			}
 		}
-		public void ApplyDebuff(Effect effect, int effectModifier)
+		public void ApplyDebuff(Effect effect)
 		{
 			try
 			{
@@ -169,7 +172,7 @@ namespace RPGClassLibrary.Mechanics
 				switch (effect.Type)
 				{
 					case EffectType.Burn or EffectType.Poison:
-						int damage = Math.Max(1, 1 + (effectModifier * effect.Strength) - entity.Stats.Strength);
+						int damage = Math.Max(1, 1 + (effect.Modifier * effect.Strength) - entity.Stats.Strength);
 						entity.Stats.Health -= damage;
 						Console.ForegroundColor = ConsoleColor.Red;
 						Console.WriteLine($"{entity.Name} took {damage} damage from the {effect.Type.ToString().ToLower()}!");
@@ -196,7 +199,7 @@ namespace RPGClassLibrary.Mechanics
 						break;
 
 					case EffectType.Weakness:
-						int weakness = effect.Strength + (effectModifier + 1);
+						int weakness = effect.Strength + (effect.Modifier + 1);
 						entity.Stats.Strength -= weakness;
 						Console.ForegroundColor = ConsoleColor.Red;
 						Console.WriteLine($"{entity.Name} has lost {weakness} strength due to their weakness!");
@@ -204,7 +207,7 @@ namespace RPGClassLibrary.Mechanics
 						break;
 
 					case EffectType.Slowness:
-						int slowness = effect.Strength + (effectModifier + 1);
+						int slowness = effect.Strength + (effect.Modifier + 1);
 						entity.Stats.Dexterity -= slowness;
 						Console.ForegroundColor = ConsoleColor.Red;
 						Console.WriteLine($"{entity.Name} has lost {slowness} dexterity due to their slowness! Reaction time and dodging is harder!");
@@ -212,7 +215,7 @@ namespace RPGClassLibrary.Mechanics
 						break;
 
 					case EffectType.ManaSickness:
-						int sickness = effect.Strength + (effectModifier * 2);
+						int sickness = effect.Strength + (effect.Modifier * 2);
 						entity.Stats.Mana -= sickness;
 						entity.Stats.MagicStr -= sickness;
 						Console.ForegroundColor = ConsoleColor.Red;
@@ -221,7 +224,7 @@ namespace RPGClassLibrary.Mechanics
 						break;
 
 					case EffectType.Curse:
-						int curse = (int)Math.Round((decimal)effect.Strength + effectModifier, 2);
+						int curse = (int)Math.Round((decimal)effect.Strength + effect.Modifier, 2);
 
 						entity.Stats.Health -= Math.Max(0, curse);
 						entity.Stats.Mana -= Math.Max(0, curse);
@@ -242,11 +245,46 @@ namespace RPGClassLibrary.Mechanics
 			}
 
 		}
-		public void ClearEffect(Effect effect, int effectModifier)
+		public void ClearEffect(Effect effect)
 		{
-			switch (effect.Type)
+			if (effect.IsBuff())
 			{
-				//TODO: logic
+				switch (effect.Type)
+				{
+					case EffectType.Slowness:
+						int slowness = effect.Strength + (effect.Modifier + 1);
+						entity.Stats.Dexterity += slowness;
+						Console.WriteLine($"{entity.Name} no longer feels slow!");
+						break;
+
+					case EffectType.Weakness:
+						int weakness = effect.Strength + (effect.Modifier + 1);
+						entity.Stats.Strength += weakness;
+						Console.WriteLine($"{entity.Name} has regained their strength!.");
+						break;
+
+					case EffectType.Curse:
+						int curse = (int)Math.Round((decimal)effect.Strength + effect.Modifier, 2);
+
+						entity.Stats.Health += Math.Max(0, curse);
+						entity.Stats.Mana += Math.Max(0, curse);
+						entity.Stats.Strength += Math.Max(0, curse);
+						entity.Stats.MagicStr += Math.Max(0, curse);
+						entity.Stats.Defense += Math.Max(0, curse);
+						entity.Stats.Dexterity += Math.Max(0, curse);
+
+						Console.WriteLine($"{entity.Name}'s curse has worn off! All stats have returned to normal.");
+						break;
+				}
+			}
+			else if (effect.IsDebuff())
+			{
+				switch (effect.Type)
+				{
+					case EffectType.Strength:
+					case EffectType.Haste:
+					case EffectType.Resistance:
+				}
 			}
 		}
 
