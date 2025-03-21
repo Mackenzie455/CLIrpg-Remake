@@ -77,7 +77,7 @@ namespace RPGClassLibrary.Mechanics
 				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 			}
 		}
-		public void EffectExecutor(int effectModifier = 10)
+		public void EffectExecutor()
 		{
 			try
 			{
@@ -282,8 +282,23 @@ namespace RPGClassLibrary.Mechanics
 				switch (effect.Type)
 				{
 					case EffectType.Strength:
+						int strength = effect.Strength + effect.Modifier;
+						entity.Stats.Strength -= strength;
+						Console.WriteLine($"{entity.Name}'s strength has returned to normal.");
+						break;
+						
 					case EffectType.Haste:
+						int haste = effect.Strength + effect.Modifier;
+						entity.Stats.Dexterity -= haste;
+						Console.WriteLine($"{entity.Name}'s speed has returned to normal.");
+						break;
+						
 					case EffectType.Resistance:
+						int resistance = effect.Strength + effect.Modifier;
+						entity.Stats.Defense -= resistance;
+						entity.Stats.MagicStr -= resistance;
+						Console.WriteLine($"{entity.Name}'s physical and magic resistance has returned to normal.");
+						break;
 				}
 			}
 		}
