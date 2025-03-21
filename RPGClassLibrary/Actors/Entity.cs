@@ -162,6 +162,10 @@ namespace RPGClassLibrary.Actors
 				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 			}
 		}
+
+		#region EffectMethods
+		// TODO: Move to Effect class? This is too bloated for the entity class.
+		// Pass in the entity to the methods.
 		public void AddEffect(Effect e)
 		{
 			try
@@ -191,6 +195,12 @@ namespace RPGClassLibrary.Actors
 
 				foreach (Effect effect in this.CurrentEffects)
 				{
+					if (effect.Duration <= 0)
+					{
+						Expired.Add(effect);
+						break;
+					}
+
 					if (effect.IsBuff())
 					{
 						ApplyBuff(effect, effectModifier);
@@ -199,16 +209,21 @@ namespace RPGClassLibrary.Actors
 					{
 						ApplyDebuff(effect, effectModifier);
 					}
+
+					effect.Duration--; //decrements the effect duration. if it reaches 0 then its added to the expiry list
 				}
 
-				//TODO: expiry logic here
+				foreach (Effect expired in Expired)
+				{
+					Console.WriteLine($"{this.Name}'s {expired.Name} has worn off!");
+					this.CurrentEffects.Remove(expired);
+				}
 			}
 			catch (Exception ex)
 			{
 				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 			}
 		}
-
 		public void ApplyBuff(Effect effect, int effectModifier)
 		{
 			try
@@ -217,21 +232,25 @@ namespace RPGClassLibrary.Actors
 				Random ran = new Random();
 				switch (effect.Type)
 				{
-					case EffectType.Regeneration: 
-
+					case EffectType.Regeneration:
+						//TODO: Have this work every turn for the duration
 						break;
 
 					case EffectType.ManaRegen:
-						
+						//TODO: Have this work every turn for the duration
 						break;
 
-					case EffectType.Haste: 
-
+					case EffectType.Haste:
+						int haste = effect.Strength + effectModifier;
+						this.Stats.Dexterity += haste;
+						Console.ForegroundColor = ConsoleColor.Green;
+						Console.WriteLine($"{this.Name} has become faster! Dexterity increased by {haste}!");
+						Console.ForegroundColor = color;
 						break;
 
 					case EffectType.Strength:
 						int strength = effect.Strength + effectModifier;
-						this.Stats.Strength = strength;
+						this.Stats.Strength += strength;
 
 						Console.ForegroundColor = ConsoleColor.Green;
 						Console.WriteLine($"{this.Name} has become stronger! Defense increased by {strength}!");
@@ -243,7 +262,7 @@ namespace RPGClassLibrary.Actors
 						this.Stats.Defense += resistance;
 
 						Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"{this.Name} has become more resistant! Defense increased by {resistance}!");
+						Console.WriteLine($"{this.Name} has become more resistant! Defense increased by {resistance}!");
 						Console.ForegroundColor = color;
 						break;
 				}
@@ -284,6 +303,7 @@ namespace RPGClassLibrary.Actors
 							Console.ForegroundColor = color;
 
 							//TODO: logic
+							//Maybe impliment accuracy stat? Or should it be inherant to abilities or BattleHandler?
 						}
 						break;
 
@@ -334,5 +354,14 @@ namespace RPGClassLibrary.Actors
 			}
 
 		}
+		public void ClearEffect(Effect effect, int effectModifier)
+		{
+			switch (effect.Type)
+			{
+
+			}
+		}
+
+		#endregion
 	}
 }

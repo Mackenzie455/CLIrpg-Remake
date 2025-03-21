@@ -22,6 +22,7 @@ namespace RPGClassLibrary.Mechanics
 		public AbilityTier Tier { get; set; }
 		public int ManaCost { get; set; }
 		public int Cooldown { get; set; }
+		public List<Effect> Effects { get; set; }
 
 		public Ability(string name, string description, AbilityTier tier, int manaCost, int cooldown)
 		{

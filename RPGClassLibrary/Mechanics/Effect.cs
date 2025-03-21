@@ -34,7 +34,6 @@ namespace RPGClassLibrary.Mechanics
 			return Type is EffectType.Strength or EffectType.Haste or EffectType.Resistance
 				or EffectType.Regeneration or EffectType.ManaRegen or EffectType.Lifesteal;
 		}
-
 		public static Effect EffectFactory()
 		{
 			//points based system like with playerfactory?
