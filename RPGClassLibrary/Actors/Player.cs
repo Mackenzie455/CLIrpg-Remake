@@ -2,10 +2,11 @@
 using RPGClassLibrary.Operations;
 using RPGClassLibrary.Items;
 using System.Text.Json.Serialization;
+using System.Runtime.Serialization;
 
 namespace RPGClassLibrary.Actors
 {
-	public class Player : Entity
+	public class Player : Entity, IJsonOnDeserialized
 	{
 		private static LoggingService log = new LoggingService(Sender.BACK); //not part of the player class
 
@@ -15,11 +16,21 @@ namespace RPGClassLibrary.Actors
 			Money = 100;
 			StatDistribution = statDist;
 			AllocationPoints = 20;
+
 			Inventory = new List<Item>();
 			CurrentEffects = new List<Effect>();
+			EffectHandler = new EffectHandler(this);
+		}
+		public Player() { }
+		public void OnDeserialized()
+		{
+			// Will automatically run whenever a player object is deserialized
+			// Assigns the EffectHandler to the player
+			Utility.bLog.Log(LogLevel.DEBUG, $"{this.Name} effect handler assigned.");
+			this.EffectHandler = new EffectHandler(this);
 		}
 
-		public Player() { }
+		//------------Methods--------------
 		public static Player PlayerFactory(string playerName, string roleName, string roleDesc = null)
 		{
 			try

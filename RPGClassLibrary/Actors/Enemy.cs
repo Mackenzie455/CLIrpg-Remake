@@ -7,6 +7,7 @@ using RPGClassLibrary.Actors;
 using RPGClassLibrary.Mechanics;
 using RPGClassLibrary.Items;
 using RPGClassLibrary.Operations;
+using System.Text.Json.Serialization;
 
 namespace RPGClassLibrary.Actors
 {
@@ -16,7 +17,7 @@ namespace RPGClassLibrary.Actors
 		Strong = (int)2.5,
 		Boss = (int)3.5
 	}
-	public class Enemy : Entity
+	public class Enemy : Entity, IJsonOnDeserialized
 	{
 		public int EXPValue { get; set; }
 		public int Difficulty { get; set; }
@@ -29,10 +30,21 @@ namespace RPGClassLibrary.Actors
 			EXPValue = expVal;
 			Tier = tier;
 			AllocationPoints = 20;
+
 			Inventory = new List<Item>();
+			EffectHandler = new EffectHandler(this);
 			Difficulty = difficulty;
 		}
 
+		public void OnDeserialized()
+		{
+			// Will automatically run whenever an enemy object is deserialized
+			// Assigns the EffectHandler to the enemy
+			Utility.bLog.Log(LogLevel.DEBUG, $"{this.Name} effect handler assigned.");
+			this.EffectHandler = new EffectHandler(this);
+		}
+
+		//------------Methods--------------
 		public static Enemy EnemyFactory(EnemyClass enemyTier, int playerLevel)
 		{
 			try
@@ -49,7 +61,7 @@ namespace RPGClassLibrary.Actors
 				int baseDifficulty = (playerLevel / 2) + ran.Next(-2, 3);
 				int enemyDifficulty = enemyTier switch
 				{
-					EnemyClass.Basic => 1 + Math.Max(1, baseDifficulty * - 2),
+					EnemyClass.Basic => 1 + Math.Max(1, baseDifficulty * -2),
 					EnemyClass.Strong => baseDifficulty * (int)EnemyClass.Strong,
 					EnemyClass.Boss => baseDifficulty * (int)EnemyClass.Boss,
 					_ => 10

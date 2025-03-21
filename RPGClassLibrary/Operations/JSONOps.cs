@@ -126,6 +126,10 @@ namespace RPGClassLibrary.Operations
 					string path = Path.Combine(Utility.GetBasePath(), "Output", "Characters", $"{playerName}.player.json");
 					string json = File.ReadAllText(path);
 					Player p = JsonSerializer.Deserialize<Player>(json, options);
+
+					// bad practice but it DOES work
+					// FIXED: handled by Entity derived classes. Implement if something goes wrong?
+					// p.EffectHandler = new Mechanics.EffectHandler(p);
 					return p;
 				}
 				catch (Exception ex)
