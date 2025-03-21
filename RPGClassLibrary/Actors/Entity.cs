@@ -1,6 +1,7 @@
 ﻿using RPGClassLibrary.Items;
 using RPGClassLibrary.Mechanics;
 using RPGClassLibrary.Operations;
+using System.Text.Json.Serialization;
 
 namespace RPGClassLibrary.Actors
 {
@@ -30,6 +31,9 @@ namespace RPGClassLibrary.Actors
 		//------------Belongings-----------
 		public List<Item> Inventory { get; set; }
 		public List<Effect> CurrentEffects { get; set; }
+		
+		[JsonIgnore]
+		public EffectHandler EffectHandler { get; set; }
 
 		//--------Constructor------------
 		protected Entity(string name, Role role, int level = 1)
@@ -39,12 +43,15 @@ namespace RPGClassLibrary.Actors
 			Level = level;
 			EXP = 0;
 			Money = 0;
-			EXPToNextLevel = 100;  // Example value
+			EXPToNextLevel = 100;
+
 			Stats = new EntityStats();
 			Inventory = new List<Item>();
 			CurrentEffects = new List<Effect>();
+			EffectHandler = new EffectHandler(this);
 		}
 		protected Entity() { }
+
 		public class EntityStats
 		{
 			public int Health { get; set; }
@@ -63,6 +70,16 @@ namespace RPGClassLibrary.Actors
 				MagicStr = _mstr;
 				Defense = _def;
 				Dexterity = _dex;
+			}
+
+			public void ShowStats()
+			{
+				Console.WriteLine($"Health: {this.Health}");
+				Console.WriteLine($"Mana: {this.Mana}");
+				Console.WriteLine($"Strength: {this.Strength}");
+				Console.WriteLine($"Magic Strength: {this.MagicStr}");
+				Console.WriteLine($"Defense: {this.Defense}");
+				Console.WriteLine($"Dexterity: {this.Dexterity}");
 			}
 		}
 
@@ -162,206 +179,5 @@ namespace RPGClassLibrary.Actors
 				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 			}
 		}
-
-		#region EffectMethods
-		// TODO: Move to Effect class? This is too bloated for the entity class.
-		// Pass in the entity to the methods.
-		public void AddEffect(Effect e)
-		{
-			try
-			{
-
-				var existingEffect = this.CurrentEffects.FirstOrDefault(effect => effect.Name == e.Name);
-				if (existingEffect != null)
-				{
-					existingEffect.Duration = Math.Max(existingEffect.Duration, e.Duration);
-					existingEffect.Strength = Math.Max(existingEffect.Strength, e.Strength);
-				}
-				else
-				{
-					this.CurrentEffects.Add(e);
-				}
-			}
-			catch (Exception ex)
-			{
-				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
-			}
-		}
-		public void EffectExecutor(int effectModifier = 10)
-		{
-			try
-			{
-				List<Effect> Expired = new List<Effect>();
-
-				foreach (Effect effect in this.CurrentEffects)
-				{
-					if (effect.Duration <= 0)
-					{
-						Expired.Add(effect);
-						break;
-					}
-
-					if (effect.IsBuff())
-					{
-						ApplyBuff(effect, effectModifier);
-					}
-					else if (effect.IsDebuff())
-					{
-						ApplyDebuff(effect, effectModifier);
-					}
-
-					effect.Duration--; //decrements the effect duration. if it reaches 0 then its added to the expiry list
-				}
-
-				foreach (Effect expired in Expired)
-				{
-					Console.WriteLine($"{this.Name}'s {expired.Name} has worn off!");
-					this.CurrentEffects.Remove(expired);
-				}
-			}
-			catch (Exception ex)
-			{
-				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
-			}
-		}
-		public void ApplyBuff(Effect effect, int effectModifier)
-		{
-			try
-			{
-				ConsoleColor color = Settings.DefaultConsoleColor;
-				Random ran = new Random();
-				switch (effect.Type)
-				{
-					case EffectType.Regeneration:
-						//TODO: Have this work every turn for the duration
-						break;
-
-					case EffectType.ManaRegen:
-						//TODO: Have this work every turn for the duration
-						break;
-
-					case EffectType.Haste:
-						int haste = effect.Strength + effectModifier;
-						this.Stats.Dexterity += haste;
-						Console.ForegroundColor = ConsoleColor.Green;
-						Console.WriteLine($"{this.Name} has become faster! Dexterity increased by {haste}!");
-						Console.ForegroundColor = color;
-						break;
-
-					case EffectType.Strength:
-						int strength = effect.Strength + effectModifier;
-						this.Stats.Strength += strength;
-
-						Console.ForegroundColor = ConsoleColor.Green;
-						Console.WriteLine($"{this.Name} has become stronger! Defense increased by {strength}!");
-						Console.ForegroundColor = color;
-						break;
-
-					case EffectType.Resistance:
-						int resistance = effect.Strength + effectModifier;
-						this.Stats.Defense += resistance;
-
-						Console.ForegroundColor = ConsoleColor.Green;
-						Console.WriteLine($"{this.Name} has become more resistant! Defense increased by {resistance}!");
-						Console.ForegroundColor = color;
-						break;
-				}
-			}
-			catch (Exception ex)
-			{
-				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
-			}
-		}
-		public void ApplyDebuff(Effect effect, int effectModifier)
-		{
-			try
-			{
-				ConsoleColor color = Settings.DefaultConsoleColor;
-				Random ran = new Random();
-				switch (effect.Type)
-				{
-					case EffectType.Burn or EffectType.Poison:
-						int damage = Math.Max(1, 1 + (effectModifier * effect.Strength) - this.Stats.Strength);
-						this.Stats.Health -= damage;
-						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine($"{this.Name} took {damage} damage from the {effect.Type.ToString().ToLower()}!");
-						Console.ForegroundColor = color;
-						break;
-
-					case EffectType.Frozen:
-						int freezeChance = ran.Next(0, 20) + effect.Strength;
-						if (freezeChance > 18)
-						{
-							Console.ForegroundColor = ConsoleColor.Red;
-							Console.WriteLine($"{Name} is frozen solid and cannot act this turn!");
-							Console.ForegroundColor = color;
-						}
-						else
-						{
-							Console.ForegroundColor = ConsoleColor.Yellow;
-							Console.WriteLine($"{Name}'s accuracy is reduced due to being frozen.");
-							Console.ForegroundColor = color;
-
-							//TODO: logic
-							//Maybe impliment accuracy stat? Or should it be inherant to abilities or BattleHandler?
-						}
-						break;
-
-					case EffectType.Weakness:
-						int weakness = effect.Strength + (effectModifier + 1);
-						this.Stats.Strength -= weakness;
-						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine($"{this.Name} has lost {weakness} strength due to their weakness!");
-						Console.ForegroundColor = color;
-						break;
-
-					case EffectType.Slowness:
-						int slowness = effect.Strength + (effectModifier + 1);
-						this.Stats.Dexterity -= slowness;
-						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine($"{this.Name} has lost {slowness} dexterity due to their slowness! Reaction time and dodging is harder!");
-						Console.ForegroundColor = color;
-						break;
-
-					case EffectType.ManaSickness:
-						int sickness = effect.Strength + (effectModifier * 2);
-						this.Stats.Mana -= sickness;
-						this.Stats.MagicStr -= sickness;
-						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine($"{this.Name} has come down with mana sickness! Mana and Magic Strength reduced by {sickness}!");
-						Console.ForegroundColor = color;
-						break;
-
-					case EffectType.Curse:
-						int curse = (int)Math.Round((decimal)effect.Strength + effectModifier, 2);
-
-						this.Stats.Health -= Math.Max(0, curse);
-						this.Stats.Mana -= Math.Max(0, curse);
-						this.Stats.Strength -= Math.Max(0, curse);
-						this.Stats.MagicStr -= Math.Max(0, curse);
-						this.Stats.Defense -= Math.Max(0, curse);
-						this.Stats.Dexterity -= Math.Max(0, curse);
-
-						Console.ForegroundColor = ConsoleColor.Red;
-						Console.WriteLine($"A dark magic attack curses {this.Name}! All stats reduced by {curse}!");
-						Console.ForegroundColor = color;
-						break;
-				}
-			}
-			catch (Exception ex)
-			{
-				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
-			}
-
-		}
-		public void ClearEffect(Effect effect, int effectModifier)
-		{
-			switch (effect.Type)
-			{
-
-			}
-		}
-
-		#endregion
 	}
 }
