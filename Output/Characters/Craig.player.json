@@ -1,47 +1,58 @@
 {
   "Name": "Craig",
-  "Level": 33,
-  "EXP": 31842,
-  "EXPToNextLevel": 33718,
+  "Level": 60,
+  "EXP": 2222854,
+  "EXPToNextLevel": 4631552,
   "Money": 100,
   "Role": {
-    "Name": "Craig",
+    "Name": "Test",
     "Description": null,
     "GrowthType": 0
   },
   "Stats": {
-    "Health": 261,
-    "Mana": 181,
-    "Strength": 141,
-    "MagicStr": 141,
-    "Defense": 141,
-    "Dexterity": 141
+    "Health": 506,
+    "Mana": 456,
+    "Strength": 416,
+    "MagicStr": 416,
+    "Defense": 416,
+    "Dexterity": 416
   },
-  "AllocationPoints": 52,
+  "AllocationPoints": 79,
   "StatDistribution": [
-    30,
-    0,
-    0,
-    0,
-    0,
-    0
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
   ],
-  "Inventory": [
-    {
+  "Inventory": {
+    "Test Sword": {
       "ID": 0,
-      "Name": "C",
+      "Name": "Test Sword",
       "Rarity": 4,
       "Type": 1,
-      "WeaponType": "C",
-      "Description": "C",
+      "WeaponType": "Sword",
+      "Description": "A steel shortsword.",
       "WeaponLevel": 1,
-      "Weight": 130,
-      "Value": 520,
-      "WeaponDamage": 260,
+      "Weight": 86,
+      "Value": 344,
+      "WeaponDamage": 172,
       "EnchantmentSlots": 3,
       "DamageType": 0,
-      "Specialization": 0
+      "Specialization": 1
     }
-  ],
-  "CurrentEffects": []
+  },
+  "CurrentEffects": [
+    {
+      "Name": "Burn",
+      "Type": 2,
+      "Strength": 10,
+      "Modifier": 5,
+      "Duration": 3,
+      "Chance": 100,
+      "DamagePerTurn": 8,
+      "EffectApplied": false
+    }
+  ]
 }
