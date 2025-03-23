@@ -29,9 +29,9 @@ namespace RPGClassLibrary.Actors
 		public int[] StatDistribution { get; set; }
 
 		//------------Belongings-----------
-		public List<Item> Inventory { get; set; }
+		public Dictionary<string, Item> Inventory { get; set; }
 		public List<Effect> CurrentEffects { get; set; }
-		
+
 		[JsonIgnore]
 		public EffectHandler EffectHandler { get; set; }
 
@@ -46,7 +46,7 @@ namespace RPGClassLibrary.Actors
 			EXPToNextLevel = 100;
 
 			Stats = new EntityStats();
-			Inventory = new List<Item>();
+			Inventory = new Dictionary<string, Item>();
 			CurrentEffects = new List<Effect>();
 			EffectHandler = new EffectHandler(this);
 		}
@@ -164,20 +164,84 @@ namespace RPGClassLibrary.Actors
 			}
 			Console.WriteLine($"Points to allocate: {AllocationPoints}");
 			Console.WriteLine("---------------------------");
-			Console.WriteLine("Inventory:");
-			Console.WriteLine($"	- Empty"); //Have proper inventory shown
+			Console.WriteLine("[Inventory]");
+			this.PrintInventory();
+			Console.WriteLine("---------------------------");
+			Console.WriteLine("[Current Effects]");
+			foreach (Effect eff in this.CurrentEffects)
+			{
+				Console.WriteLine($"	Name: {eff.Name}");
+				Console.WriteLine($"	Effect Type: {eff.Type.ToString()}");
+				Console.WriteLine($"	Duration: {eff.Duration}");
+				Console.WriteLine($"	Strength: {eff.Strength} | Modifier: {eff.Modifier}");
+				Console.WriteLine($"	Damage Per Turn: {eff.DamagePerTurn}");
+				Console.WriteLine($"	Applied: {eff.EffectApplied}");
+				Console.WriteLine();
+			}
+			Console.WriteLine();
 			Console.WriteLine("---------------------------");
 		}
 		public void AddItemToInventory(Item item)
 		{
 			try
 			{
-				Inventory.Add(item);
+				Inventory.Add(item.Name, item);
 			}
 			catch (Exception ex)
 			{
 				Utility.bLog.ExceptionLog(LogLevel.ERROR, ex);
 			}
+		}
+		public void PrintInventory()
+		{
+			if (Inventory != null || Inventory.Count <= 0)
+			{
+				foreach (var item in Inventory)
+				{
+					if (item.Value is Weapon wx)
+					{
+						Console.WriteLine("[Weapon]");
+						Console.WriteLine($"Name: {wx.Name}");
+						Console.WriteLine($"Description: {wx.Description}");
+						Console.WriteLine($"Type: {wx.WeaponType}");
+						Console.WriteLine($"Rarity:{wx.Rarity}");
+						Console.WriteLine();
+						Console.WriteLine($"Weight: {wx.Weight}");
+						Console.WriteLine($"Value: {wx.Value}");
+						Console.WriteLine($"Specialization: {wx.Specialization}");
+						Console.WriteLine();
+						Console.WriteLine($"Damage: {wx.WeaponDamage}");
+						Console.WriteLine("[EFFECTS]");
+						foreach (Effect eff in wx.Effects)
+						{
+							Console.WriteLine($"	Name: {eff.Name}");
+							Console.WriteLine($"	Effect Type: {eff.Type.ToString()}");
+							Console.WriteLine($"	Duration: {eff.Duration}");
+							Console.WriteLine($"	Strength: {eff.Strength} | Modifier: {eff.Modifier}");
+							Console.WriteLine($"	Damage Per Turn: {eff.DamagePerTurn}");
+							Console.WriteLine($"	Applied: {eff.EffectApplied}");
+							Console.WriteLine();
+						}
+						Console.WriteLine("[ENCHANTMENTS]");
+						Console.WriteLine($"	Enchantment Slots: {wx.EnchantmentSlots}");
+						foreach (Enchantment enc in wx.Enchantments)
+						{
+							//TODO logic
+						}
+					}
+					else
+					{
+
+					}
+					Console.WriteLine("");
+				}
+			}
+			else
+			{
+				Console.WriteLine("	- Empty");
+			}
+			Console.WriteLine("---------------------------");
+
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace RPGClassLibrary.Actors
 			Tier = tier;
 			AllocationPoints = 20;
 
-			Inventory = new List<Item>();
+			Inventory = new Dictionary<string, Item>();
 			EffectHandler = new EffectHandler(this);
 			Difficulty = difficulty;
 		}

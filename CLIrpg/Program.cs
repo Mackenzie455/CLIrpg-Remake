@@ -82,7 +82,6 @@ namespace CLIrpg
 							d.GainExp(amt);
 							d.Info();
 							Console.WriteLine();
-							d.PrintInventory();
 							JSONOps.Serialize.SerializePlayer(d);
 							Console.Read();
 							break;
